@@ -1,0 +1,56 @@
+{% extends 'mainbase.html' %}
+{% block content %}
+<div class="min-h-screen bg-gray-100 mt-20 py-16">
+    <div class="container mx-auto px-4">
+        <div class="max-w-4xl mx-auto bg-white shadow-2xl rounded-2xl overflow-hidden">
+            <div class="bg-gradient-to-r from-blue-600 to-indigo-700 p-6">
+                <h2 class="text-4xl font-bold text-white text-center tracking-wide">
+                    Message from the {{ role }}
+                </h2>
+            </div>
+
+            <div class="p-8 relative">
+                {% if message.image %}
+                    <div class="flex justify-center mb-6">
+                        <div class="relative">
+                            <img src="{{ message.image.url }}" alt="{{ role }}'s Image" 
+                                 class="w-48 h-48 rounded-full object-cover border-6 border-blue-300 shadow-xl">
+                            <div class="absolute bottom-0 right-0 bg-blue-500 text-white rounded-full w-12 h-12 flex items-center justify-center">
+                                <i class="fas fa-graduation-cap"></i>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <div class="text-center">
+                    
+                    <div class="prose prose-lg text-gray-700 max-w-prose mx-auto leading-relaxed text-justify">
+                        {{ message.message|safe }}
+                    </div>
+
+                    <div class="mt-8 border-t pt-4 text-gray-600">
+                        <p class="italic">
+                            "Education is the passport to the future." - Malcolm X
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-gray-100 p-4 text-center">
+                <div class="flex justify-center space-x-4">
+                    <a href="#" class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">
+                        About Our School
+                    </a>
+                    <a href="#" class="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition">
+                        Contact Us
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_head %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+{% endblock %}

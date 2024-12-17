@@ -1,0 +1,64 @@
+{% extends 'mainbase.html' %}
+
+{% block content %}
+<div class="container mx-auto mt-28 px-4 py-6">
+    <!-- Header -->
+    <h1 class="text-4xl font-bold text-gray-900 mb-8 text-center">Academic Calendar</h1>
+
+    <!-- Academic Year Table -->
+    <div class="overflow-x-auto">
+        <table class="min-w-full bg-white border border-gray-300 rounded-lg shadow-lg">
+            <thead>
+                <tr class="bg-gray-100">
+                    <th class="px-6 py-3 text-left text-lg font-semibold text-gray-700">Academic Year</th>
+                    <th class="px-6 py-3 text-left text-lg font-semibold text-gray-700">Semester</th>
+                    <th class="px-6 py-3 text-left text-lg font-semibold text-gray-700">Event</th>
+                    <th class="px-6 py-3 text-left text-lg font-semibold text-gray-700">Dates</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+                {% for year in academic_years %}
+                    {% for semester in year.semesters.all %}
+                        {% for event in semester.events.all %}
+                            <tr class="hover:bg-gray-50">
+                                <!-- Academic Year Column -->
+                                <td class="px-6 py-4 text-sm font-medium text-gray-800">{{ year }}</td>
+                                
+                                <!-- Semester Column -->
+                                <td class="px-6 py-4 text-sm font-medium text-gray-800">{{ semester.get_semester_number_display }} ({{ semester.start_date }} - {{ semester.end_date }})</td>
+                                
+                                <!-- Event Column -->
+                                <td class="px-6 py-4 text-sm font-medium text-gray-800">
+                                    {{ event.name }}
+                                    {% if event.is_holiday %}
+                                        <span class="inline-block bg-red-100 text-red-800 text-xs font-semibold py-1 px-2 rounded-full mt-1">
+                                            Holiday
+                                        </span>
+                                    {% endif %}
+                                </td>
+                                
+                                <!-- Dates Column -->
+                                <td class="px-6 py-4 text-sm font-medium text-gray-800">{{ event.event_date }}</td>
+                            </tr>
+                        {% endfor %}
+                    {% endfor %}
+                    <!-- Display Holidays -->
+                    {% for holiday in year.holidays.all %}
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 text-sm font-medium text-gray-800">{{ year }}</td>
+                            <td class="px-6 py-4 text-sm font-medium text-gray-800">N/A</td>
+                            <td class="px-6 py-4 text-sm font-medium text-gray-800">
+                                {{ holiday.name }}
+                                <span class="inline-block bg-red-100 text-red-800 text-xs font-semibold py-1 px-2 rounded-full mt-1">
+                                    Holiday
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 text-sm font-medium text-gray-800">{{ holiday.holiday_date }}</td>
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,143 @@
+{% extends "mainbase.html" %}
+{% block content %}
+<div class="bg-white min-h-screen">
+    <div class="container mx-auto mt-28 px-4 py-12">
+        <!-- Header Section with Professional Layout -->
+        <div class="max-w-6xl mx-auto">
+            <div class="flex flex-col md:flex-row items-center justify-between mb-12 space-y-6 md:space-y-0">
+                <!-- Back Navigation -->
+                <a href="javascript:history.back()" class="text-gray-600 hover:text-blue-600 flex items-center space-x-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                    <span class="font-medium">Back</span>
+                </a>
+
+                <!-- Club Logo and Name -->
+                <div class="flex flex-col items-center">
+                    <img src="{{ club.logo.url }}" alt="{{ club.name }}" class="w-32 h-32 object-cover rounded-full border-4 border-gray-200 shadow-lg mb-4">
+                    <h1 class="text-3xl md:text-4xl font-bold text-gray-800 text-center">{{ club.name }}</h1>
+                    <p class="text-gray-500 mt-2">Established {{ club.established_year }}</p>
+                </div>
+
+                <!-- Placeholder for potential action button -->
+                <div class="hidden md:block">
+                    <a href="#" class="px-6 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition">
+                        Join Club
+                    </a>
+                </div>
+            </div>
+
+            <!-- Description Section -->
+            <div class="bg-gray-50 border border-gray-100 rounded-xl p-8 mb-12 shadow-sm">
+                <div class="max-w-4xl mx-auto text-left">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-4 text-center">About the Club</h2>
+                    <p class="text-gray-600 leading-relaxed">{{ club.description }}</p>
+                </div>
+            </div>
+
+            
+
+            <!-- Leadership Section -->
+            <section class="mb-16">
+                <h2 class="text-3xl font-bold text-center text-gray-800 mb-10">Club Leadership</h2>
+                <div class="grid md:grid-cols-3 gap-8 mx-auto max-w-7xl">
+                    {% for moderator in club.moderators.all %}
+                    <div class="bg-white border border-gray-100 rounded-xl p-6 text-center shadow-md hover:shadow-xl transition-all">
+                        {% if moderator.image %}
+                            <img src="{{ moderator.image.url }}" alt="{{ moderator.name }}" 
+                                class="w-32 h-32 mx-auto rounded-full object-cover border-4 border-blue-100 mb-4">
+                        {% else %}
+                            <img src="/static/default-avatar.jpg" alt="Default Avatar" 
+                                class="w-32 h-32 mx-auto rounded-full object-cover border-4 border-blue-100 mb-4">
+                        {% endif %}
+                        <h3 class="text-xl font-semibold text-gray-800">{{ moderator.name }}</h3>
+                        <p class="text-blue-600 font-medium">{{ moderator.designation }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+
+
+
+            <!-- Members Section -->
+            <section class="mb-16">
+                <h2 class="text-3xl font-bold text-center text-gray-800 mb-10">Our Members</h2>
+                <div class="grid md:grid-cols-4 gap-6">
+                    {% for member in club.members.all %}
+                    <div class="bg-white border border-gray-100 rounded-xl p-4 text-center shadow-md hover:shadow-xl transition-all">
+                        {% if member.image %}
+                            <img src="{{ member.image.url }}" alt="{{ member.name }}" 
+                                 class="w-24 h-24 mx-auto rounded-full object-cover border-4 border-gray-100 mb-3">
+                        {% else %}
+                            <img src="/static/default-avatar.jpg" alt="Default Avatar" 
+                                 class="w-24 h-24 mx-auto rounded-full object-cover border-4 border-gray-100 mb-3">
+                        {% endif %}
+                        <h3 class="text-lg font-semibold text-gray-800">{{ member.name }}</h3>
+                        <p class="text-gray-500 text-sm">{{ member.designation }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+
+            <!-- Slider Section -->
+            <section class="slider-test">
+                {% if sliders %}
+                    <div id="club-slider" class="splide">
+                        <div class="splide__track">
+                            <ul class="splide__list">
+                                {% for slider in sliders %}
+                                    <li class="splide__slide">
+                                        <div class="relative">
+                                            <img src="{{ slider.image.url }}" alt="{{ slider.title }}" class="w-full h-64 object-cover">
+                                            {% if slider.title %}
+                                                <div class="absolute bottom-0 left-0 right-0 bg-gray-800 bg-opacity-60 text-white py-2 px-4">
+                                                    <h3 class="text-lg font-semibold">{{ slider.title }}</h3>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                {% else %}
+                    <p>No sliders available</p>
+                {% endif %}
+            </section>
+
+
+            <!-- Include Splide.js CSS and JavaScript -->
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.0.7/dist/css/splide.min.css">
+            <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.0.7/dist/js/splide.min.js"></script>
+
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    try {
+                        // Initialize Splide.js
+                        const slider = new Splide('#club-slider', {
+                            type: 'loop',
+                            perPage: 3,
+                            perMove: 1,
+                            gap: '1rem',
+                            autoplay: true,
+                            interval: 3000,
+                            breakpoints: {
+                                1024: { perPage: 2 },
+                                768: { perPage: 1 },
+                            },
+                        });
+                        slider.mount();
+                    } catch (error) {
+                        console.error("Error initializing Splide.js:", error);
+                    }
+                });
+            </script>
+
+            
+            
+
+        </div>
+    </div>
+</div>
+{% endblock %}

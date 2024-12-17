@@ -1,0 +1,253 @@
+<!-- templates/contact.html -->
+{% extends 'mainbase.html' %}
+{% block extra_css %}
+<style>
+    /* Contact Form Unique Styling */
+    .contact-page {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        max-width: 1200px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .contact-info {
+        flex: 1;
+        background-color: #f9f9f9;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .contact-info h3 {
+        font-size: 24px;
+        color: #333;
+        margin-bottom: 15px;
+    }
+
+    .contact-info p {
+        font-size: 16px;
+        margin-bottom: 10px;
+        line-height: 1.6;
+    }
+
+    .contact-info i {
+        color: #4CAF50;
+        margin-right: 10px;
+    }
+
+    .contact-info a {
+        color: #007bff;
+        text-decoration: none;
+    }
+
+    .contact-info a:hover {
+        text-decoration: underline;
+    }
+
+    .google-map {
+        margin-top: 20px;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .contact-form-container {
+        flex: 1;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .contact-form-title {
+        text-align: center;
+        color: #333;
+        margin-bottom: 20px;
+        font-size: 28px;
+    }
+
+    .contact-form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .contact-form input, .contact-form textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+
+    .contact-form textarea {
+        height: 150px;
+        resize: vertical;
+    }
+
+    .contact-form-button {
+        padding: 12px 20px;
+        font-size: 16px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .contact-form-button:hover {
+        background-color: #45a049;
+    }
+    .contact-page {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        max-width: 1200px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .contact-info, .contact-form-container {
+        flex: 1;
+        min-width: 300px;
+    }
+
+    /* Google Map Styling */
+    .google-map {
+        width: 100%;
+        height: 300px;
+        border-radius: 8px;
+        overflow: hidden;
+        margin-top: 20px;
+        background-color: #f0f0f0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #888;
+    }
+
+    @media (max-width: 768px) {
+        .contact-page {
+            flex-direction: column;
+        }
+
+        .contact-form-container {
+            margin-bottom: 20px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="contact-page" style="margin-top: 120px;">
+    <!-- Contact Information Section -->
+    <div class="contact-info">
+        <h3>Contact Information</h3>
+        <p><i class="fas fa-map-marker-alt"></i> Address: 97, Asad Avenue, Mohammadpur, Dhaka</p>
+        <p><i class="fas fa-envelope"></i> Email: <a href="mailto:info@sjs.edu.bd">info@sjs.edu.bd</a></p>
+        <p><i class="fas fa-phone"></i> Mobile: <a href="tel:+880188920020">0188920020</a></p>
+        <p><i class="fas fa-clock"></i> School hours: 9:00 AM to 5:20 PM</p>
+        <p><i class="fas fa-calendar"></i> Weekends: Friday & Saturday</p>
+
+        <!-- Google Map Div -->
+        <div id="map" class="google-map">Loading Map...</div>
+    </div>
+
+    <!-- Contact Form Section -->
+    <div class="contact-form-container">
+        <h2 class="contact-form-title">Contact Us</h2>
+        <form method="post" class="contact-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="contact-form-button">Send</button>
+        </form>
+
+        {% if messages %}
+            <ul class="contact-form-messages">
+                {% for message in messages %}
+                    <li class="contact-form-message-item">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Fontawesome Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+<!-- Google Maps Script with Error Handling -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Check if Google Maps API is available
+    if (typeof google === 'undefined') {
+        const mapElement = document.getElementById('map');
+        mapElement.innerHTML = 'Error: Google Maps API could not be loaded. Please check your internet connection and API key.';
+        mapElement.style.color = 'red';
+        return;
+    }
+
+    function initMap() {
+        // The location of St. Joseph International School
+        const schoolLocation = { lat: 23.759848829498402, lng: 90.3702806671281 };
+
+        // Create the map centered at the school's location
+        const map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 17,
+            center: schoolLocation,
+            mapTypeControl: false,
+            streetViewControl: false,
+        });
+
+        // Add a marker at the school's location
+        const marker = new google.maps.Marker({
+            position: schoolLocation,
+            map: map,
+            title: 'St. Joseph International School',
+            animation: google.maps.Animation.DROP
+        });
+
+        // Add an info window
+        const infoWindow = new google.maps.InfoWindow({
+            content: '<strong>St. Joseph International School</strong><br>97, Asad Avenue, Mohammadpur, Dhaka'
+        });
+
+        // Open info window on marker click
+        marker.addListener('click', () => {
+            infoWindow.open(map, marker);
+        });
+    }
+
+    // Load Google Maps script dynamically
+    function loadGoogleMapsScript() {
+        const script = document.createElement('script');
+        script.src = `https://maps.googleapis.com/maps/api/js?key=YOUR_ACTUAL_GOOGLE_MAPS_API_KEY&callback=initMap`;
+        script.async = true;
+        script.defer = true;
+        script.onerror = function() {
+            const mapElement = document.getElementById('map');
+            mapElement.innerHTML = 'Error: Could not load Google Maps. Please check your API key and internet connection.';
+            mapElement.style.color = 'red';
+        };
+        document.head.appendChild(script);
+    }
+
+    // Attach initMap to window to be called by the dynamically loaded script
+    window.initMap = initMap;
+
+    // Load the script
+    loadGoogleMapsScript();
+});
+</script>
+{% endblock %}
+

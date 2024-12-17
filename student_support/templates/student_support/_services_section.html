@@ -1,0 +1,19 @@
+<section class="container mx-auto px-4 py-16">
+    <h2 class="text-4xl font-bold text-center mb-12 text-text-light">
+        Our Services
+    </h2>
+    
+    <div class="grid md:grid-cols-3 gap-6">
+        {% for service in services %}
+        <div class="bg-primary p-6 rounded-lg shadow-lg text-center 
+                    transform hover:scale-105 transition-all duration-300 
+                    animate-section opacity-0 translate-y-10">
+            <div class="text-5xl text-secondary mb-4 flex justify-center">
+                <i class="{{ service.icon }}"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">{{ service.title }}</h3>
+            <p class="text-text-light">{{ service.description }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</section>

@@ -1,0 +1,322 @@
+{% extends "mainbase.html" %}
+{% load static %}
+
+{% block title %}Faculty{% endblock %}
+
+{% block content %}
+<style>
+    /* Category Title Styling */
+.category-title {
+    font-size: 1.8rem;          /* Make the text slightly larger */
+    font-weight: bold;          /* Make the text bold */
+    color: #2c3e50;             /* A dark gray color for the title */
+    margin: 0 auto 20px;        /* Center the title horizontally and add space below */
+    text-transform: uppercase;  /* Convert text to uppercase for emphasis */
+    letter-spacing: 1px;        /* Space out the letters for readability */
+    border-bottom: 2px solid #3498db; /* Add a colored underline for a modern look */
+    padding-bottom: 10px;       /* Space between the text and underline */
+    text-align: center;         /* Center the text horizontally */
+    width: fit-content;         /* Ensure the width fits the content */
+}
+
+/* Add a subtle hover effect */
+.category-title:hover {
+    color: #3498db;             /* Change the color to blue when hovered */
+    cursor: pointer;           /* Change cursor to pointer */
+}
+
+    /* Tab Navigation Styles */
+    .faculty-tab-navigation {
+        display: flex;
+        justify-content: center;
+        margin-top: 150px;
+        margin-bottom: 30px;
+    }
+
+    .faculty-tab {
+        padding: 12px 24px;
+        margin: 0 10px;
+        border: none;
+        background: linear-gradient(135deg, #3b82f6, #9333ea);
+        color: white;
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+        border-radius: 30px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .faculty-tab::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(120deg, transparent, rgba(255,255,255,0.3), transparent);
+        transition: all 0.6s;
+    }
+
+    .faculty-tab:hover::before {
+        left: 100%;
+    }
+
+    /* Active Tab Styling */
+.faculty-tab.active {
+    background: linear-gradient(135deg, #0794c3, #04f6f6);  /* A gradient background for the active tab */
+    color: #ffffff;  /* Ensure text is white for contrast */
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+
+   
+
+    @keyframes activeTabUnderline {
+        from { width: 0; }
+        to { width: 100%; }
+    }
+
+    /* Add subtle hover effect for inactive tabs */
+    .faculty-tab:not(.active):hover {
+        background: linear-gradient(135deg, #4a90e2, #a855f7);
+        transform: scale(1.02);
+    }
+
+    /* Pagination Styles */
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+        margin-top: 30px;
+        user-select: none;
+    }
+
+    .pagination-btn {
+        background: linear-gradient(135deg, #3b82f6, #9333ea);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 25px;
+        cursor: pointer;
+        font-family: 'Poppins', sans-serif;
+        font-size: 0.9em;
+        font-weight: 600;
+        text-transform: uppercase;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        min-width: 120px;
+        text-align: center;
+    }
+
+    .pagination-btn:hover {
+        background: linear-gradient(135deg, #9333ea, #3b82f6);
+        transform: scale(1.05);
+    }
+
+    .pagination-btn:disabled {
+        background: #cccccc;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
+
+    .page-indicator {
+        font-family: 'Poppins', sans-serif;
+        color: #4b5563;
+        font-weight: 500;
+    }
+
+    /* Tab Content Visibility */
+    .faculty-category-content {
+        display: none;
+    }
+
+    .faculty-category-content.active {
+        display: block;
+    }
+
+    /* Faculty Container and Grid */
+    .faculty-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 30px;
+        background-color: #f3f4f6;
+    }
+
+    .faculty-card-group {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 25px;
+        justify-content: center;
+    }
+
+    /* Individual Card */
+    .faculty-card {
+        background: #ffffff;
+        border-radius: 12px;
+        overflow: hidden;
+        transition: transform 0.3s, box-shadow 0.3s;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .faculty-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .faculty-card img {
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+        object-position: top;
+    }
+
+    .faculty-info {
+        padding: 15px;
+        text-align: center;
+        background: #3b82f6;
+        color: #ffffff;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .faculty-info p.name {
+        font-size: 1.1em;
+        font-weight: 600;
+        margin-bottom: 5px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .faculty-info p.designation {
+        font-size: 0.9em;
+        font-style: italic;
+        color: #f0f0f0;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1024px) {
+        .faculty-card-group {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .faculty-card-group {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .faculty-tab-navigation {
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .faculty-tab {
+            margin: 5px;
+            padding: 10px 18px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .faculty-card-group {
+            grid-template-columns: 1fr;
+        }
+
+        .pagination {
+            flex-direction: column;
+            gap: 10px;
+        }
+    }
+</style>
+
+<!-- Tab Navigation -->
+<div class="faculty-tab-navigation">
+    <button class="faculty-tab active" data-category="administration">Administration</button>
+    <button class="faculty-tab" data-category="teachers">Teachers</button>
+    <button class="faculty-tab" data-category="office-staff">Office Staff</button>
+</div>
+
+<section class="faculty-container">
+    {% for category, page in categories.items %}
+        <div id="{{ category|lower|slugify }}-category" 
+             class="faculty-category-content {% if forloop.first %}active{% endif %}">
+            {% if page %}
+                <div class="category-title">{{ category }}</div>
+
+                <div class="faculty-card-group">
+                    {% for member in page.object_list %}
+                        <div class="faculty-card">
+                            <img src="{{ member.image.url }}" alt="{{ member.name }}" />
+                            <div class="faculty-info">
+                                <p class="name">{{ member.name }}</p>
+                                <p class="designation">{{ member.designation }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Pagination Controls -->
+                {% if page.paginator.num_pages > 1 %}
+                    <div class="pagination">
+                        {% if page.has_previous %}
+                            <a class="pagination-btn" href="?{{ category|lower }}_page=1">First</a>
+                            <a class="pagination-btn" href="?{{ category|lower }}_page={{ page.previous_page_number }}">Previous</a>
+                        {% else %}
+                            <span class="pagination-btn disabled">First</span>
+                            <span class="pagination-btn disabled">Previous</span>
+                        {% endif %}
+
+                        <span class="page-indicator">Page {{ page.number }} of {{ page.paginator.num_pages }}</span>
+
+                        {% if page.has_next %}
+                            <a class="pagination-btn" href="?{{ category|lower }}_page={{ page.next_page_number }}">Next</a>
+                            <a class="pagination-btn" href="?{{ category|lower }}_page={{ page.paginator.num_pages }}">Last</a>
+                        {% else %}
+                            <span class="pagination-btn disabled">Next</span>
+                            <span class="pagination-btn disabled">Last</span>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+            {% endif %}
+        </div>
+    {% endfor %}
+</section>
+
+
+
+
+<script>
+    // Tab Switching Logic
+document.querySelectorAll('.faculty-tab').forEach(tab => {
+    tab.addEventListener('click', function() {
+        // Remove active from all tabs and tab contents
+        document.querySelectorAll('.faculty-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.faculty-category-content').forEach(c => c.classList.remove('active'));
+
+        // Add active to clicked tab
+        this.classList.add('active');
+
+        // Show corresponding category content
+        const category = this.getAttribute('data-category');
+        const categoryElement = document.getElementById(`${category}-category`);
+        categoryElement.classList.add('active');
+    });
+});
+
+</script>
+{% endblock %}

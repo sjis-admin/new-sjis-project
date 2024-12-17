@@ -1,0 +1,62 @@
+{% extends 'mainbase.html' %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-2xl mx-auto bg-white shadow rounded-lg p-8">
+        <h1 class="text-3xl font-bold mb-6">Report Rule Violation</h1>
+        
+        <div class="mb-6">
+            <h2 class="text-xl font-semibold mb-2">Rule Details</h2>
+            <p class="text-gray-700">{{ rule.title }}</p>
+            <p class="text-sm text-gray-600">{{ rule.description }}</p>
+        </div>
+
+        <form method="post" enctype="multipart/form-data" class="space-y-6">
+            {% csrf_token %}
+            
+            <div>
+                <label for="offender" class="block mb-2 font-semibold">Select Offender</label>
+                <select name="offender" id="offender" class="w-full p-2 border rounded" required>
+                    <option value="">Select a user</option>
+                    {% for user in users %}
+                        <option value="{{ user.username }}">{{ user.get_full_name }} ({{ user.username }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <label for="description" class="block mb-2 font-semibold">Violation Description</label>
+                <textarea 
+                    name="description" 
+                    id="description" 
+                    rows="4" 
+                    class="w-full p-2 border rounded" 
+                    placeholder="Provide details about the rule violation"
+                    required
+                ></textarea>
+            </div>
+
+            <div>
+                <label for="evidence" class="block mb-2 font-semibold">Evidence (Optional)</label>
+                <input 
+                    type="file" 
+                    name="evidence" 
+                    id="evidence" 
+                    class="w-full p-2 border rounded"
+                    accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                >
+                <p class="text-sm text-gray-600 mt-2">Allowed file types: PDF, DOC, DOCX, JPG, PNG</p>
+            </div>
+
+            <div>
+                <button 
+                    type="submit" 
+                    class="w-full bg-red-500 text-white py-2 rounded hover:bg-red-600 transition"
+                >
+                    Submit Violation Report
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

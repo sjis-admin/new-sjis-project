@@ -1,0 +1,99 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}St. Joseph International School{% endblock %}</title>
+    
+    {# Tailwind CSS #}
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    {# Custom Tailwind Configuration #}
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#4162a9',
+                        'secondary': '#D1345B',
+                        'background': '#1F2E55',
+                        'text-light': '#ffffff'
+                    },
+                    fontFamily: {
+                        'sans': ['Arial', 'sans-serif'],
+                        'display': ['Georgio', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    {# Additional Head Content #}
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="bg-background text-text-light antialiased">
+    {# Navigation #}
+    <nav class="bg-primary py-4 sticky top-0 z-50">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <a href="{% url 'student_support:home' %}" class="flex items-center space-x-3">
+                <img src="{% static 'images/sjis_logo.png' %}" 
+                     alt="SJIS Logo" 
+                     class="h-16 w-16 object-contain">
+                <span class="text-2xl font-bold text-text-light">
+                    ST. JOSEPH INTERNATIONAL SCHOOL
+                </span>
+            </a>
+            
+            <div>
+                <a href="{% url 'student_support:contact' %}" 
+                   class="bg-secondary text-text-light px-4 py-2 rounded-lg 
+                          hover:bg-opacity-90 transition-colors duration-300">
+                    Contact Us
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    {# Main Content #}
+    <main>
+        {% block content %}
+            <div class="container">
+                {% include 'student_support/_welcome_section.html' %}
+                {% include 'student_support/_services_section.html' %}
+                {% include 'student_support/_faq_section.html' %}
+                {% include 'student_support/_counselors_section.html' %}
+            </div>
+        {% endblock %}
+    </main>
+
+    {# Footer #}
+    {% include 'components/_footer.html' %}
+
+    {# JavaScript #}
+    <script defer>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('.animate-section');
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const observerCallback = (entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.remove('opacity-0', 'translate-y-10');
+                        entry.target.classList.add('opacity-100', 'translate-y-0');
+                    }
+                });
+            };
+
+            const observer = new IntersectionObserver(observerCallback, observerOptions);
+            sections.forEach(section => observer.observe(section));
+        });
+    </script>
+
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,150 @@
+{% extends "mainbase.html" %}
+{% load static %}
+{% block title %}About Us{% endblock %}
+{% block content %}
+
+<div class="min-h-screen mt-20 bg-gradient-to-b from-gray-50 to-white">
+  <div class="container mx-auto px-4 py-12">
+    <!-- Hero Section -->
+
+    <div class="flex flex-col lg:flex-row gap-8">
+      <!-- Sticky Sidebar Navigation -->
+      <aside class="lg:w-1/4">
+        <div class="sticky top-4">
+          <nav class="bg-white rounded-2xl shadow-md overflow-hidden">
+            <div class="bg-[#189AB4] py-4 px-6">
+              <h2 class="text-white font-semibold text-lg">Quick Navigation</h2>
+            </div>
+            <ul class="p-4 space-y-1">
+              <li>
+                <a href="#history" class="flex items-center px-4 py-3 rounded-xl transition-all duration-200 hover:bg-[#f0f9ff] group">
+                  <span class="w-2 h-2 bg-[#189AB4] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 mr-3"></span>
+                  <span class="text-gray-700 group-hover:text-[#189AB4] font-medium">History</span>
+                </a>
+              </li>
+              <li>
+                <a href="#mission" class="flex items-center px-4 py-3 rounded-xl transition-all duration-200 hover:bg-[#f0f9ff] group">
+                  <span class="w-2 h-2 bg-[#189AB4] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 mr-3"></span>
+                  <span class="text-gray-700 group-hover:text-[#189AB4] font-medium">Mission</span>
+                </a>
+              </li>
+              <li>
+                <a href="#vision" class="flex items-center px-4 py-3 rounded-xl transition-all duration-200 hover:bg-[#f0f9ff] group">
+                  <span class="w-2 h-2 bg-[#189AB4] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 mr-3"></span>
+                  <span class="text-gray-700 group-hover:text-[#189AB4] font-medium">Vision</span>
+                </a>
+              </li>
+              <li>
+                <a href="#goal" class="flex items-center px-4 py-3 rounded-xl transition-all duration-200 hover:bg-[#f0f9ff] group">
+                  <span class="w-2 h-2 bg-[#189AB4] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 mr-3"></span>
+                  <span class="text-gray-700 group-hover:text-[#189AB4] font-medium">Goal</span>
+                </a>
+              </li>
+              <li>
+                <a href="#objectives" class="flex items-center px-4 py-3 rounded-xl transition-all duration-200 hover:bg-[#f0f9ff] group">
+                  <span class="w-2 h-2 bg-[#189AB4] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 mr-3"></span>
+                  <span class="text-gray-700 group-hover:text-[#189AB4] font-medium">Objectives</span>
+                </a>
+              </li>
+              <li>
+                <a href="#activities" class="flex items-center px-4 py-3 rounded-xl transition-all duration-200 hover:bg-[#f0f9ff] group">
+                  <span class="w-2 h-2 bg-[#189AB4] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 mr-3"></span>
+                  <span class="text-gray-700 group-hover:text-[#189AB4] font-medium">Activities</span>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <div class="lg:w-3/4 space-y-8">
+        <!-- History Section -->
+        <section id="history" class="transform transition-all duration-300 hover:scale-[1.01]">
+          <div class="bg-white rounded-2xl shadow-md overflow-hidden">
+            <div class="bg-[#189AB4] px-8 py-6">
+              <h2 class="text-2xl font-bold text-white">Our History</h2>
+            </div>
+            <div class="p-8">
+              <div class="prose prose-lg max-w-none">
+                {{ about_us.infrastructure|safe }}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Mission Section -->
+        <section id="mission" class="transform transition-all duration-300 hover:scale-[1.01]">
+          <div class="bg-white rounded-2xl shadow-md overflow-hidden">
+            <div class="bg-[#189AB4] px-8 py-6">
+              <h2 class="text-2xl font-bold text-white">Our Mission</h2>
+            </div>
+            <div class="p-8">
+              <div class="prose prose-lg max-w-none">
+                {{ about_us.membership_affiliation|safe }}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Vision Section -->
+        <section id="vision" class="transform transition-all duration-300 hover:scale-[1.01]">
+          <div class="bg-white rounded-2xl shadow-md overflow-hidden">
+            <div class="bg-[#189AB4] px-8 py-6">
+              <h2 class="text-2xl font-bold text-white">Our Vision</h2>
+            </div>
+            <div class="p-8">
+              <div class="prose prose-lg max-w-none">
+                {{ about_us.awards|safe }}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Goal Section -->
+        <section id="goal" class="transform transition-all duration-300 hover:scale-[1.01]">
+          <div class="bg-white rounded-2xl shadow-md overflow-hidden">
+            <div class="bg-[#189AB4] px-8 py-6">
+              <h2 class="text-2xl font-bold text-white">Our Goal</h2>
+            </div>
+            <div class="p-8">
+              <div class="prose prose-lg max-w-none">
+                {{ about_us.goal|safe }}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Objectives Section -->
+        <section id="objectives" class="transform transition-all duration-300 hover:scale-[1.01]">
+          <div class="bg-white rounded-2xl shadow-md overflow-hidden">
+            <div class="bg-[#189AB4] px-8 py-6">
+              <h2 class="text-2xl font-bold text-white">Our Objectives</h2>
+            </div>
+            <div class="p-8">
+              <div class="prose prose-lg max-w-none">
+                {{ about_us.objectives|safe }}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Activities Section -->
+        <section id="activities" class="transform transition-all duration-300 hover:scale-[1.01]">
+          <div class="bg-white rounded-2xl shadow-md overflow-hidden">
+            <div class="bg-[#189AB4] px-8 py-6">
+              <h2 class="text-2xl font-bold text-white">Program Activities</h2>
+            </div>
+            <div class="p-8">
+              <div class="prose prose-lg max-w-none">
+                {{ about_us.program_activities|safe }}
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

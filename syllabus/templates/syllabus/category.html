@@ -1,0 +1,25 @@
+{% extends "mainbase.html" %}
+{% block content %}
+<h1 class="text-2xl font-semibold">{{ category.name }}</h1>
+<p class="text-gray-600">{{ category.description }}</p>
+<div class="grid md:grid-cols-2 gap-6 mt-4">
+    {% for syllabus in syllabi %}
+        <div class="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-xl transition duration-300">
+            <div class="p-6">
+                <h2 class="text-xl font-semibold mb-2">{{ syllabus.title }}</h2>
+                <p class="text-gray-600 mb-4">{{ syllabus.description|truncatechars:100 }}</p>
+                <a href="{{ syllabus.file.url }}" 
+                   class="text-blue-500 hover:text-blue-600 font-medium" target="_blank">
+                   Download
+                </a>
+            </div>
+        </div>
+    {% empty %}
+        <p>No syllabi available in this category.</p>
+    {% endfor %}
+</div>
+<a href="{% url 'syllabus:syllabus_list' %}" 
+   class="text-blue-500 hover:text-blue-600 mt-6 inline-block">
+   Back to Categories
+</a>
+{% endblock %}

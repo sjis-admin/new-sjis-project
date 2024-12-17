@@ -1,0 +1,133 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-gray-50 to-gray-100 antialiased">
+    <div class="relative w-screen h-screen overflow-hidden">
+        <div class="swiper-container w-full h-full">
+            <div class="swiper-wrapper">
+                {% for image in images %}
+                <div class="swiper-slide relative group">
+                    <div 
+                        class="absolute inset-0 bg-cover bg-center transform transition-transform duration-700 group-hover:scale-105"
+                        style="background-image: url('{{ image.image.url }}')"
+                        data-swiper-parallax="-23%"
+                    ></div>
+
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+
+                    <div class="container px-4 mx-auto relative z-10 h-full flex items-center justify-center">
+                        <div class="text-center max-w-4xl px-4 transform transition-all duration-700 
+                            translate-y-10 opacity-0 
+                            group-hover:translate-y-0 group-hover:opacity-100">
+                            
+                            <h2 class="text-white text-3xl sm:text-4xl md:text-6xl font-extrabold mb-4 
+                                tracking-tight leading-tight 
+                                animate-text bg-gradient-to-r from-white via-gray-200 to-gray-400 
+                                bg-clip-text text-transparent">
+                                {{ image.caption }}
+                            </h2>
+
+                            {% if image.description %}
+                            <p class="text-base sm:text-xl md:text-2xl text-gray-200 mb-6 
+                                font-medium typewriter-text max-w-2xl mx-auto">
+                                {{ image.description }}
+                            </p>
+                            {% endif %}
+
+                            {% if image.action_url %}
+                            <a href="{{ image.action_url }}" 
+                               class="inline-flex items-center px-6 py-2 sm:px-8 sm:py-3 
+                                      border border-transparent text-sm sm:text-base font-medium 
+                                      rounded-full shadow-lg 
+                                      text-white bg-indigo-600 
+                                      hover:bg-indigo-700 
+                                      transition-all duration-300 
+                                      transform hover:scale-105 
+                                      group/btn">
+                                Learn More
+                                <i class="ri-arrow-right-line ml-2 
+                                    group-hover/btn:translate-x-1 
+                                    transition-transform"></i>
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="swiper-button-prev rounded-full bg-white/20 backdrop-blur-sm 
+                        hover:bg-white/30 transition-all duration-300 
+                        hidden md:flex items-center justify-center 
+                        w-10 h-10 absolute top-1/2 left-4 z-20 
+                        -translate-y-1/2 text-white"></div>
+            <div class="swiper-button-next rounded-full bg-white/20 backdrop-blur-sm 
+                        hover:bg-white/30 transition-all duration-300 
+                        hidden md:flex items-center justify-center 
+                        w-10 h-10 absolute top-1/2 right-4 z-20 
+                        -translate-y-1/2 text-white"></div>
+
+            <div class="swiper-pagination 
+                        absolute bottom-8 left-1/2 
+                        -translate-x-1/2 
+                        flex space-x-2 z-20"></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const swiper = new Swiper('.swiper-container', {
+            loop: true,
+            speed: 1000,
+            parallax: true,
+            autoplay: {
+                delay: 6000,
+                disableOnInteraction: false
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+                renderBullet: function (index, className) {
+                    return `<span class="${className} w-6 h-2 
+                            bg-white/50 rounded-full mx-1 
+                            transition-all duration-300 
+                            hover:bg-white hover:w-8"></span>`;
+                },
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev'
+            },
+            effect: 'creative',
+            creativeEffect: {
+                prev: {
+                    shadow: true,
+                    translate: ['-20%', 0, -1],
+                },
+                next: {
+                    translate: ['100%', 0, 0],
+                },
+            },
+            lazy: {
+                loadPrevNext: true,
+                loadPrevNextAmount: 2
+            }
+        });
+    });
+    </script>
+</body>
+</html>

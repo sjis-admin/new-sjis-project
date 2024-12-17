@@ -1,0 +1,64 @@
+{% extends 'mainbase.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mx-auto mt-28 px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6">Rules and Regulations Dashboard</h1>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Rule Categories -->
+        <div class="bg-white shadow rounded-lg p-6">
+            <h2 class="text-xl font-semibold mb-4">Rule Categories</h2>
+            <ul class="space-y-2">
+                {% for category in categories %}
+                    <li>
+                        <a href="{% url 'rules_by_category' category.id %}" class="text-blue-600 hover:underline">
+                            {{ category.name }} ({{ category.rule_count }} rules)
+                        </a>
+                    </li>
+                {% empty %}
+                    <li>No categories found</li>
+                {% endfor %}
+            </ul>
+            <a href="{% url 'rules:rule_category_list' %}" class="mt-4 block text-sm text-gray-600 hover:underline">
+                View All Categories
+            </a>
+        </div>
+
+        <!-- Recent Rules -->
+        <div class="bg-white shadow rounded-lg p-6">
+            <h2 class="text-xl font-semibold mb-4">Recent Rules</h2>
+            <ul class="space-y-2">
+                {% for rule in recent_rules %}
+                    <li>
+                        <a href="{% url 'rule_detail' rule.id %}" class="text-blue-600 hover:underline">
+                            {{ rule.title }} 
+                            <span class="text-sm text-gray-500">({{ rule.category.name }})</span>
+                        </a>
+                    </li>
+                {% empty %}
+                    <li>No recent rules</li>
+                {% endfor %}
+            </ul>
+            <a href="{% url 'rules:rule_list' %}" class="mt-4 block text-sm text-gray-600 hover:underline">
+                View All Rules
+            </a>
+        </div>
+
+        <!-- Statistics -->
+        <div class="bg-white shadow rounded-lg p-6">
+            <h2 class="text-xl font-semibold mb-4">Quick Statistics</h2>
+            <div class="space-y-3">
+                <div>
+                    <p class="text-gray-600">Total Rules</p>
+                    <p class="text-2xl font-bold">{{ total_rules }}</p>
+                </div>
+                <div>
+                    <p class="text-gray-600">Total Violations Reported</p>
+                    <p class="text-2xl font-bold">{{ total_violations }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

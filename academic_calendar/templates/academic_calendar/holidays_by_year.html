@@ -1,0 +1,10 @@
+{% extends 'mainbase.html' %}
+
+{% block content %}
+<h1>Holidays for Academic Year: {{ academic_year }}</h1>
+<ul>
+    {% for holiday in holidays %}
+        <li>{{ holiday.name }} - {{ holiday.holiday_date }}</li>
+    {% endfor %}
+</ul>
+{% endblock %}

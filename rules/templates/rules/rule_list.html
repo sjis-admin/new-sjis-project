@@ -1,0 +1,13 @@
+{% extends 'mainbase.html' %}
+{% block content %}
+  <h1>Rules</h1>
+  <div class="rule-list">
+    {% for rule in rules %}
+      <div class="rule-item">
+        <h3><a href="{% url 'rule_detail' rule.id %}">{{ rule.title }}</a></h3>
+        <p>{{ rule.short_description }}</p>
+        <small>Created on {{ rule.created_at|date:"F j, Y" }} by {{ rule.created_by }}</small>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}

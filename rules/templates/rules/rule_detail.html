@@ -1,0 +1,80 @@
+{% extends 'mainbase.html' %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="bg-white shadow rounded-lg p-6">
+        <div class="flex justify-between items-start">
+            <div>
+                <h1 class="text-3xl font-bold mb-4">{{ rule.title }}</h1>
+                <p class="text-gray-600 mb-2">
+                    Category: {{ rule.category.name }} | 
+                    Severity: <span class="font-semibold {% if rule.severity == 'critical' %}text-red-600{% elif rule.severity == 'high' %}text-orange-600{% else %}text-gray-600{% endif %}">
+                        {{ rule.get_severity_display }}
+                    </span>
+                </p>
+            </div>
+            <a href="{% url 'report_violation' rule.id %}" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
+                Report Violation
+            </a>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-6 mt-6">
+            <div>
+                <h2 class="text-xl font-semibold mb-3">Rule Description</h2>
+                <p>{{ rule.description }}</p>
+                
+                {% if rule.full_text %}
+                    <div class="mt-4">
+                        <h3 class="text-lg font-semibold mb-2">Full Text</h3>
+                        <p>{{ rule.full_text }}</p>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div>
+                <h2 class="text-xl font-semibold mb-3">Rule Details</h2>
+                <ul class="space-y-2">
+                    <li><strong>Applicable To:</strong> {{ rule.applicable_to }}</li>
+                    <li><strong>Status:</strong> {{ rule.get_status_display }}</li>
+                    {% if rule.effective_date %}
+                        <li><strong>Effective Date:</strong> {{ rule.effective_date }}</li>
+                    {% endif %}
+                    <li><strong>Created By:</strong> {{ rule.created_by.get_full_name }}</li>
+                </ul>
+
+                {% if documents %}
+                    <div class="mt-6">
+                        <h3 class="text-lg font-semibold mb-2">Supporting Documents</h3>
+                        <ul class="space-y-1">
+                            {% for document in documents %}
+                                <li>
+                                    <a href="{{ document.file.url }}" target="_blank" class="text-blue-600 hover:underline">
+                                        {{ document.name }}
+                                        <span class="text-sm text-gray-500">({{ document.file.size|filesizeformat }})</span>
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if related_rules %}
+            <div class="mt-8">
+                <h2 class="text-xl font-semibold mb-4">Related Rules</h2>
+                <div class="grid md:grid-cols-3 gap-4">
+                    {% for related_rule in related_rules %}
+                        <div class="bg-gray-100 p-4 rounded">
+                            <a href="{% url 'rule_detail' related_rule.id %}" class="text-blue-600 hover:underline">
+                                {{ related_rule.title }}
+                            </a>
+                            <p class="text-sm text-gray-600 mt-2">{{ related_rule.description|truncatewords:10 }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

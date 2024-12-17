@@ -1,0 +1,10 @@
+{% extends 'mainbase.html' %}
+
+{% block content %}
+<h1>Semesters for Term: {{ term }}</h1>
+<ul>
+    {% for semester in semesters %}
+        <li><a href="{% url 'events_by_semester' semester.id %}">Semester {{ semester.semester_number }} ({{ semester.start_date }} - {{ semester.end_date }})</a></li>
+    {% endfor %}
+</ul>
+{% endblock %}

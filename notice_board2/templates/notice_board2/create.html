@@ -1,0 +1,101 @@
+{% extends 'mainbase.html' %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-2xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
+        <div class="p-6">
+            <h1 class="text-2xl font-bold mb-6 text-gray-800">
+                {% if form.instance.pk %}
+                Edit Notice
+                {% else %}
+                Create New Notice
+                {% endif %}
+            </h1>
+
+            <form method="post" enctype="multipart/form-data" class="space-y-6">
+                {% csrf_token %}
+                
+                <div>
+                    <label for="{{ form.title.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                        Notice Title
+                    </label>
+                    {{ form.title|add_class:"w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" }}
+                    {% if form.title.errors %}
+                        <p class="text-red-500 text-sm mt-1">{{ form.title.errors }}</p>
+                    {% endif %}
+                </div>
+
+                <div>
+                    <label for="{{ form.content.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                        Notice Content
+                    </label>
+                    {{ form.content }}
+                    {% if form.content.errors %}
+                        <p class="text-red-500 text-sm mt-1">{{ form.content.errors }}</p>
+                    {% endif %}
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Target Grades
+                    </label>
+                    <div class="grid grid-cols-3 gap-2">
+                        {% for checkbox in form.target_grades %}
+                        <div class="flex items-center">
+                            {{ checkbox.tag }}
+                            <label for="{{ checkbox.id_for_label }}" class="ml-2 block text-sm text-gray-900">
+                                {{ checkbox.choice_label }}
+                            </label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% if form.target_grades.errors %}
+                        <p class="text-red-500 text-sm mt-1">{{ form.target_grades.errors }}</p>
+                    {% endif %}
+                </div>
+
+                <div>
+                    <label for="{{ form.attachment.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                        Attachment (Optional)
+                    </label>
+                    <div class="flex items-center">
+                        {{ form.attachment|add_class:"block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" }}
+                    </div>
+                    {% if form.attachment.errors %}
+                        <p class="text-red-500 text-sm mt-1">{{ form.attachment.errors }}</p>
+                    {% endif %}
+                </div>
+
+                <div class="flex space-x-4">
+                    <button type="submit" 
+                            class="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 transition duration-300">
+                        {% if form.instance.pk %}Update{% else %}Create{% endif %} Notice
+                    </button>
+                    
+                    <a href="{% url 'notice_board:list' %}" 
+                       class="bg-gray-200 text-gray-800 px-6 py-2 rounded hover:bg-gray-300 transition duration-300">
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Initialize CKEditor for rich text editing
+    document.addEventListener('DOMContentLoaded', function() {
+        CKEDITOR.replace('id_content', {
+            height: 300,
+            width: '100%',
+            toolbar: [
+                { name: 'document', items: ['Source'] },
+                { name: 'styles', items: ['Format'] },
+                { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike'] },
+                { name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent'] },
+                { name: 'links', items: ['Link', 'Unlink'] },
+            ]
+        });
+    });
+</script>
+{% endblock %}

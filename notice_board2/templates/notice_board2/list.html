@@ -1,0 +1,142 @@
+<!-- list.html -->
+{% extends 'mainbase.html' %}
+{% load static hitcount_tags %}
+
+{% block content %}
+<div class="container mx-auto mt-24 px-4 py-8">
+    <!-- Hero Section -->
+    <div class="bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl shadow-2xl mb-12 p-8">
+        <div class="max-w-3xl mx-auto text-center">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4 leading-tight">
+                Notice Board
+            </h1>
+            
+            
+            <!-- Search Bar -->
+            <form class="max-w-xl mx-auto flex" method="get">
+                <div class="relative flex-grow mr-2">
+                    <input 
+                        type="search" 
+                        name="search" 
+                        placeholder="Search notices..." 
+                        class="w-full pl-10 pr-4 py-3 rounded-lg border-0 focus:ring-2 focus:ring-white/30"
+                    >
+                    <svg class="absolute left-3 top-3.5 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </div>
+                <button type="submit" class="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition duration-300">
+                    Search
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Notices Grid -->
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {% for notice in notices %}
+        <div class="group relative">
+            <div class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-3">
+                <!-- Decorative Gradient Overlay -->
+                <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-500 to-purple-600"></div>
+                
+                <div class="p-6 relative">
+                    <!-- Title Section -->
+                    <div class="flex justify-between items-start mb-4">
+                        <h2 class="text-xl font-bold text-gray-800 pr-4 break-words flex-grow">
+                            {{ notice.title }}
+                        </h2>
+                        
+                        {% if notice.is_new %}
+                        <span class="bg-green-500 text-white text-xs px-2 py-1 rounded-full animate-pulse ml-2">
+                            New
+                        </span>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Notice Details -->
+                    <div class="space-y-3 mb-6">
+                        <div class="flex items-center text-sm text-gray-600">
+                            <svg class="w-5 h-5 mr-2 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                            <span>{{ notice.created_at|date:"F d, Y" }}</span>
+                        </div>
+                        
+                        <div class="flex items-center text-sm text-gray-600">
+                            <svg class="w-5 h-5 mr-2 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                            </svg>
+                            <span>Views: {% get_hit_count for notice %}</span>
+                        </div>
+                        
+                    <div class="text-sm text-gray-700 flex items-center">
+                    <!-- Target Group Icon -->
+                    <span class="material-icons w-5 h-5 mr-2 text-blue-400">
+                        group
+                    </span>
+                    <span class="font-semibold">Target Group: </span>
+                    <span class="text-blue-600 ml-1">{{ notice.formatted_target_grades }}</span>
+                </div>
+
+
+
+                    </div>
+                    
+                    <!-- View Details Button -->
+                    <a href="{% url 'notice_board2:detail' notice.pk %}"  
+                       class="w-full block text-center bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-3 rounded-lg 
+                              hover:from-blue-600 hover:to-purple-700 transition duration-300 
+                              group-hover:scale-105 transform">
+                        View Details
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-span-full text-center py-16 bg-white rounded-2xl shadow-lg">
+            <svg class="mx-auto w-24 h-24 text-gray-300 mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 005.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <p class="text-2xl text-gray-600 mb-4">No notices available</p>
+            <p class="text-gray-500">Check back later for updates</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if is_paginated %}
+    <div class="flex justify-center mt-12">
+        <div class="inline-flex items-center space-x-2 bg-white rounded-lg shadow-md p-1">
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}" 
+                   class="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-l-lg">
+                    Previous
+                </a>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                    <span class="px-4 py-2 bg-blue-500 text-white">
+                        {{ num }}
+                    </span>
+                {% else %}
+                    <a href="?page={{ num }}" 
+                       class="px-4 py-2 text-gray-700 hover:bg-gray-100">
+                        {{ num }}
+                    </a>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}" 
+                   class="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-r-lg">
+                    Next
+                </a>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
